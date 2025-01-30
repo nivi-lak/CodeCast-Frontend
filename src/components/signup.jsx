@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios"
 import {
   Box,
   Typography,
@@ -37,6 +38,20 @@ const SignupPage = () => {
     e.preventDefault();
     console.log("Sign Up Data:", formData);
   };
+
+  const signup = () => {
+    const signup_data = {
+      name: formData.fullName,
+      email: formData.email,
+      password: formData.password
+    }
+    console.log("hello")
+    axios.post('http://localhost:8000/users/register', signup_data)
+      .then(res => {
+        console.log(res.data)
+        console.log(res.status)
+      })
+  }
 
   return (
     <Box
@@ -178,6 +193,7 @@ const SignupPage = () => {
             fullWidth
             variant="contained"
             color="secondary"
+            onClick={signup}
             sx={{
               bgcolor: "purple",
               mt: 2,
