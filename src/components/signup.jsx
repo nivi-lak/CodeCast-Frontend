@@ -69,7 +69,7 @@ const SignupPage = () => {
             fullWidth
             margin="normal"
             variant="outlined"
-            InputProps={{
+            slotProps={{
               startAdornment: (
                 <InputAdornment position="start">📝</InputAdornment>
               ),
@@ -97,7 +97,7 @@ const SignupPage = () => {
             fullWidth
             margin="normal"
             variant="outlined"
-            InputProps={{
+            slotProps={{
               startAdornment: (
                 <InputAdornment position="start">📧</InputAdornment>
               ),
@@ -112,7 +112,7 @@ const SignupPage = () => {
             fullWidth
             margin="normal"
             variant="outlined"
-            InputProps={{
+            slotProps={{
               startAdornment: (
                 <InputAdornment position="start">🔒</InputAdornment>
               ),
@@ -137,7 +137,7 @@ const SignupPage = () => {
             fullWidth
             margin="normal"
             variant="outlined"
-            InputProps={{
+            slotProps={{
               startAdornment: (
                 <InputAdornment position="start">🔒</InputAdornment>
               ),
