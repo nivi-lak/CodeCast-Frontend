@@ -1,0 +1,22 @@
+1. -------------------------
+✅ Why use InputProps instead of slotProps?
+
+slotProps.endAdornment makes the icon disappear when there's no input.
+InputProps.endAdornment keeps the icon always visible.
+✅ How does this work?
+
+endAdornment ensures the eye icon is always shown, even when the input field is empty.
+Clicking the eye icon toggles between "text" and "password", letting users see their password.
+2. -------------------------
+for textfeild (color of text,border)
+sx={{
+              input:{color:"white"}, //text color once u input text
+              "& .MuiInputLabel-root": { color: "rgba(86, 86, 86, 1)", borderColor:"rgba(86, 86, 86, 1)"}, // Default label color
+              "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Label color when focused
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "rgba(86, 86, 86, 1)" }, // Default border
+                "&:hover fieldset": { borderColor: "white" }, // Hover border
+              },
+            }}
+3. --------------------------
+

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios"
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Typography,
@@ -18,11 +20,12 @@ const SignupPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,31 +39,53 @@ const SignupPage = () => {
 
   const handleSignup = (e) => {
     e.preventDefault();
-    console.log("Sign Up Data:", formData);
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    signup();
   };
 
   const signup = () => {
     const signup_data = {
       name: formData.fullName,
       email: formData.email,
-      password: formData.password
-    }
-    console.log("hello")
-    axios.post('http://localhost:8000/users/register', signup_data)
-      .then(res => {
-        console.log(res.data)
-        console.log(res.status)
+      password: formData.password,
+    };
+
+    axios
+      .post("http://localhost:8000/users/register", signup_data)
+      .then((res) => {
+        console.log(res.data);
+        console.log(res.status);
+        if (res.status === 200 || res.status === 201) {
+          console.log("Successsss !!!")
+          navigate("/home"); // Navigate to HomePage after signup
+        }
       })
-  }
+      .catch((error) => {
+        if (error.response && error.response.status === 409) {
+          alert("This email is already registered. Please log in or use a different email.");
+        } else {
+          console.error("Signup failed:", error);
+          alert("Signup failed. Please try again later.");
+        }
+      });      
+  };
 
   return (
     <Box
       sx={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
         bgcolor: "rgba(18, 18, 18, 1)",
+        overflow: "hidden",
       }}
     >
       <Box
@@ -82,41 +107,35 @@ const SignupPage = () => {
             name="fullName"
             label="Full Name"
             fullWidth
+            sx={{
+              input: { color: "white" },
+              "& .MuiInputLabel-root": { color: "rgba(86, 86, 86, 1)" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "white" },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "rgba(86, 86, 86, 1)" },
+                "&:hover fieldset": { borderColor: "white" },
+              },
+            }}
             margin="normal"
             variant="outlined"
-            slotProps={{
-              startAdornment: (
-                <InputAdornment position="start">📝</InputAdornment>
-              ),
-            }}
             value={formData.fullName}
-            onChange={handleChange}
-          />
-          <TextField
-            name="username"
-            label="Username"
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">👤</InputAdornment>
-              ),
-            }}
-            value={formData.username}
             onChange={handleChange}
           />
           <TextField
             name="email"
             label="Email"
             fullWidth
+            sx={{
+              input: { color: "white" },
+              "& .MuiInputLabel-root": { color: "rgba(86, 86, 86, 1)" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "white" },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "rgba(86, 86, 86, 1)" },
+                "&:hover fieldset": { borderColor: "white" },
+              },
+            }}
             margin="normal"
             variant="outlined"
-            slotProps={{
-              startAdornment: (
-                <InputAdornment position="start">📧</InputAdornment>
-              ),
-            }}
             value={formData.email}
             onChange={handleChange}
           />
@@ -125,17 +144,29 @@ const SignupPage = () => {
             label="Password"
             type={showPassword ? "text" : "password"}
             fullWidth
+            sx={{
+              input: { color: "white" },
+              "& .MuiInputLabel-root": { color: "rgba(86, 86, 86, 1)" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "white" },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "rgba(86, 86, 86, 1)" },
+                "&:hover fieldset": { borderColor: "white" },
+              },
+            }}
             margin="normal"
             variant="outlined"
-            slotProps={{
-              startAdornment: (
-                <InputAdornment position="start">🔒</InputAdornment>
-              ),
+            InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <Button
                     onClick={() => togglePasswordVisibility("password")}
-                    sx={{ minWidth: 0, p: 0, color: "inherit" }}
+                    sx={{
+                      minWidth: 0,
+                      p: 0,
+                      color: "rgba(86, 86, 86, 1)",
+                      background: "transparent",
+                      "&:hover": { background: "transparent" },
+                    }}
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </Button>
@@ -150,17 +181,29 @@ const SignupPage = () => {
             label="Confirm Password"
             type={showConfirmPassword ? "text" : "password"}
             fullWidth
+            sx={{
+              input: { color: "white" },
+              "& .MuiInputLabel-root": { color: "rgba(86, 86, 86, 1)" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "white" },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "rgba(86, 86, 86, 1)" },
+                "&:hover fieldset": { borderColor: "white" },
+              },
+            }}
             margin="normal"
             variant="outlined"
-            slotProps={{
-              startAdornment: (
-                <InputAdornment position="start">🔒</InputAdornment>
-              ),
+            InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <Button
                     onClick={() => togglePasswordVisibility("confirmPassword")}
-                    sx={{ minWidth: 0, p: 0, color: "inherit" }}
+                    sx={{
+                      minWidth: 0,
+                      p: 0,
+                      color: "rgba(86, 86, 86, 1)",
+                      background: "transparent",
+                      "&:hover": { background: "transparent" },
+                    }}
                   >
                     {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                   </Button>
@@ -172,15 +215,15 @@ const SignupPage = () => {
           />
 
           <FormControlLabel
-            control={<Checkbox color="primary" />}
+            control={<Checkbox sx={{ color: "rgba(165, 14, 178, 1)" }} />}
             label={
               <>
                 I Agree with{" "}
-                <Link href="#" underline="hover" color="primary">
+                <Link href="#" underline="hover" color="rgba(165, 14, 178, 1)">
                   privacy
                 </Link>{" "}
                 and{" "}
-                <Link href="#" underline="hover" color="primary">
+                <Link href="#" underline="hover" color="rgba(165, 14, 178, 1)">
                   policy
                 </Link>
               </>
@@ -193,7 +236,6 @@ const SignupPage = () => {
             fullWidth
             variant="contained"
             color="secondary"
-            onClick={signup}
             sx={{
               bgcolor: "purple",
               mt: 2,
