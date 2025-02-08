@@ -1,10 +1,13 @@
-import React from "react";
-import { Box, Typography, IconButton, Button } from "@mui/material";
+//import React from "react";
+import React, { useState } from "react";
+import { Box, Typography, IconButton, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
 
 const HomePage = () => {
+  const [openPopup, setOpenPopup] = useState(false);
+  const [openPop, setOpenPop] = useState(false);
   return (
     <Box
       sx={{
@@ -54,6 +57,7 @@ const HomePage = () => {
         paddingBottom:"10px",
       }}>
         <Button
+        onClick={() => setOpenPop(true)}
         type="submit"
         variant="contained"
         
@@ -95,6 +99,7 @@ const HomePage = () => {
           <AddIcon/>
         </IconButton>
         <Button
+        onClick={() => setOpenPopup(true)}
         sx={{
           color:"white",
            fontFamily: "Arial, sans-serif",
@@ -106,6 +111,42 @@ const HomePage = () => {
         </Button>
         </Box>
       </Box>
+
+
+      <Dialog open={openPopup} onClose={() => setOpenPopup(false)}>
+        <DialogTitle>Create Room</DialogTitle>
+        <DialogContent>
+
+          <TextField label="CC Pin" fullWidth margin="dense" />
+          <TextField label="Password" fullWidth margin="dense" />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenPopup(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button href="/room" onClick={() => setOpenPopup(false)} color="primary" variant="contained">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+      <Dialog open={openPop} onClose={() => setOpenPop(false)}>
+        <DialogTitle>Join Room</DialogTitle>
+        <DialogContent>
+
+          <TextField label="Enter CC Pin" fullWidth margin="dense" />
+          <TextField label="Enter Password" fullWidth margin="dense" />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenPop(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button href="/room" onClick={() => setOpenPop(false)} color="primary" variant="contained">
+            Join
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
