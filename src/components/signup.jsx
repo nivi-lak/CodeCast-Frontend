@@ -241,7 +241,6 @@ const SignupPage = () => {
               mt: 2,
               mb: 2,
               ":hover": { bgcolor: "darkorchid" },
-              borderRadius: 3,
             }}
           >
             Sign Up
