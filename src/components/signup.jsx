@@ -54,7 +54,7 @@ const SignupPage = () => {
     };
 
     axios
-      .post("http://localhost:8000/users/register", signup_data)
+      .post("http://localhost:5000/users/register", signup_data ,{ withCredentials: true })
       .then((res) => {
         console.log(res.data);
         console.log(res.status);
