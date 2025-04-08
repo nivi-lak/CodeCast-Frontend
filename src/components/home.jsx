@@ -1,10 +1,11 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { Box, Typography, IconButton, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
 import axios from "../api/axios.js";
 import socket from "../api/socket.js"
+import logo from "../assets/logo.svg"
 const HomePage = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [openPop, setOpenPop] = useState(false);
@@ -110,7 +111,7 @@ const HomePage = () => {
         sx={{
           position: "relative", // Set position relative for child elements
           width: "100vw",
-          height: "40px",
+          height: "60px",
           background: "rgba(38, 38, 38, 1)",
           display: "flex",
           alignItems: "center", // Vertically center the content
@@ -123,9 +124,9 @@ const HomePage = () => {
         <IconButton sx={{ position: "absolute", right: 50, color: "white", transform: "scale(1.5)" }}>
           <SettingsIcon />
         </IconButton>
-        <Typography variant="h5" sx={{ marginLeft: 6 }}>
-          CC
-        </Typography>
+        <Box sx={{ p: 2 }}>
+          <img src={logo} alt="Logo" style={{ height: 40 }} />
+        </Box>
       </Box>
       <Box
         sx={{
@@ -199,11 +200,23 @@ const HomePage = () => {
       </Box>
 
 
-      <Dialog open={openPopup} onClose={() => setOpenPopup(false)}>
+      <Dialog 
+      open={openPopup}
+      onClose={() => setOpenPopup(false)} 
+      slotProps={{
+        paper: {
+          sx: {
+            // bgcolor: '#2a2a2a',
+            // color: 'white',
+            padding: 2,
+            borderRadius: 2,
+          }
+        }
+      }}>
         <DialogTitle>Create Room</DialogTitle>
         <DialogContent>
-          <TextField sx={{ input: { color: "black" } }} label="CC Pin" fullWidth margin="dense" value={cc_pin} disabled />
-          <TextField label="Password" fullWidth margin="dense" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <TextField sx={{ input: { color: "white" } }} label="CC Pin" fullWidth margin="dense" variant="outlined" value={cc_pin} disabled />
+          <TextField label="Password" variant="outlined" fullWidth margin="dense" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <Box sx={{ display: "flex", height: "50px", border: "1px solid", borderColor: "rgba(150, 149, 149, 1)", borderRadius: 1 }}>
             <Typography variant="h7" sx={{ paddingTop: "10px", paddingLeft: "10px", color: "rgba(131, 131, 131, 1)" }}>
               Link
