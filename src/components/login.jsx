@@ -5,7 +5,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import useApi from "../hooks/useApi.js";
 const theme = createTheme({
   palette: {
     primary: {
@@ -17,7 +17,7 @@ const theme = createTheme({
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const api = useApi();
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
@@ -28,14 +28,13 @@ const LoginPage = () => {
       email: email,
       password: password
     }
-    axios
-      .post("http://localhost:5000/users/login", logindata,{ withCredentials: true })
+
+     api.post('/users/login', logindata)
       .then((res) => {
         console.log(res);
         if (res.status == 200 || res.status == 201) {
           console.log("logged in successfully")
           navigate("/home");
-
         }
       })
       .catch((error) => {
@@ -45,7 +44,26 @@ const LoginPage = () => {
           console.error("login failed:", error);
           alert("Login failed. Invalid credentials");
         }
-      });
+      })
+
+    // axios
+    //   .post("http://localhost:5000/users/login", logindata,{ withCredentials: true })
+    //   .then((res) => {
+    //     console.log(res);
+    //     if (res.status == 200 || res.status == 201) {
+    //       console.log("logged in successfully")
+    //       navigate("/home");
+
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     if (error.response && error.response.status === 409) {
+    //       alert("This email is already registered. Please log in or use a different email.");
+    //     } else {
+    //       console.error("login failed:", error);
+    //       alert("Login failed. Invalid credentials");
+    //     }
+    //   });
   };
 
 

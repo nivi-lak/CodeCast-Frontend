@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import useApi from "../hooks/useApi.js";
 import {
   Box,
   Typography,
@@ -16,6 +16,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const SignupPage = () => {
+  const api = useApi();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -53,8 +54,7 @@ const SignupPage = () => {
       password: formData.password,
     };
 
-    axios
-      .post("http://localhost:5000/users/register", signup_data ,{ withCredentials: true })
+    api.post('/users/register', signup_data)
       .then((res) => {
         console.log(res.data);
         console.log(res.status);
@@ -70,7 +70,26 @@ const SignupPage = () => {
           console.error("Signup failed:", error);
           alert("Signup failed. Please try again later.");
         }
-      });      
+      })
+
+    // axios
+    //   .post("http://localhost:5000/users/register", signup_data ,{ withCredentials: true })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     console.log(res.status);
+    //     if (res.status === 200 || res.status === 201) {
+    //       console.log("Successsss !!!")
+    //       navigate("/home"); // Navigate to HomePage after signup
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     if (error.response && error.response.status === 409) {
+    //       alert("This email is already registered. Please log in or use a different email.");
+    //     } else {
+    //       console.error("Signup failed:", error);
+    //       alert("Signup failed. Please try again later.");
+    //     }
+    //   });      
   };
 
   return (

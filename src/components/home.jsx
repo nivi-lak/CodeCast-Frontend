@@ -3,15 +3,16 @@ import { Box, Typography, IconButton, Button, Dialog, DialogTitle, DialogContent
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
-import axios from "../api/axios.js";
 import socket from "../api/socket.js"
 import logo from "../assets/logo.svg"
+import useApi from "../hooks/useApi.js";
 const HomePage = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [openPop, setOpenPop] = useState(false);
   const [roomUrl, setRoomUrl] = useState("");
   const [cc_pin, setcc_pin] = useState("");
   const [password, setPassword] = useState("");
+  const api = useApi();
   const generateRoomUrl = () => {
     const roomId = Math.random().toString(36).slice(2, 10);
     setcc_pin(roomId) // Generate unique room ID
@@ -19,7 +20,7 @@ const HomePage = () => {
     setRoomUrl(url);
   };
 
-  const joinroom = async () => {
+  const joinroom = () => {
 
     if (!socket) {
       console.log("socket is not connected");
@@ -31,32 +32,55 @@ const HomePage = () => {
       console.log("Password is not set");
     }
 
-    await axios.post('/room/addUserToRoom', {
-      cc_pin,
-      password
-    }).then((res) => {
-      console.log(res);
-      if (res.status == 200 || res.status == 201) {
-        setPassword("");
-        setcc_pin("")
-        console.log("Room credentials coorect, the user can navigate")
-        const url = `${window.location.origin}/room/${cc_pin}`; // Construct the full URL
-        setRoomUrl(url);
-        localStorage.setItem("creater", false)
+    api
+      .post('/room/addUserToRoom', { cc_pin, password })
+      .then((res) => {
+        console.log(res);
+        if (res.status == 200 || res.status == 201) {
+          setPassword("");
+          setcc_pin("")
+          console.log("Room credentials coorect, the user can navigate")
+          const url = `${window.location.origin}/room/${cc_pin}`; // Construct the full URL
+          setRoomUrl(url);
+          localStorage.setItem("creater", false)
 
-        setOpenPopup(false);
-        if (url) {
-          // console.log("hiii")
-          window.open(url, "_blank");
+          setOpenPopup(false);
+          if (url) {
+            // console.log("hiii")
+            window.open(url, "_blank");
+          }
         }
+      })
+      .catch((error) => {
+        console.log(error)
 
-      }
-    }).catch((error) => {
-      console.log(error)
-    })
+      })
+    // axios.post('/room/addUserToRoom', {
+    //   cc_pin,
+    //   password
+    // }).then((res) => {
+    //   console.log(res);
+    //   if (res.status == 200 || res.status == 201) {
+    //     setPassword("");
+    //     setcc_pin("")
+    //     console.log("Room credentials coorect, the user can navigate")
+    //     const url = `${window.location.origin}/room/${cc_pin}`; // Construct the full URL
+    //     setRoomUrl(url);
+    //     localStorage.setItem("creater", false)
+
+    //     setOpenPopup(false);
+    //     if (url) {
+    //       // console.log("hiii")
+    //       window.open(url, "_blank");
+    //     }
+
+    //   }
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
   }
 
-  const createroom = async () => {
+  const createroom = () => {
     console.log(socket)
     if (!socket) {
       console.log("socket is not connected");
@@ -67,10 +91,8 @@ const HomePage = () => {
     if (!password) {
       console.log("Password is not set");
     }
-
-    await axios.post('/room/create-room', {
-      cc_pin,
-      password
+    api.post('/room/create-room', {
+      cc_pin, password
     }).then((res) => {
       console.log(res);
       if (res.status == 200 || res.status == 201) {
@@ -87,9 +109,34 @@ const HomePage = () => {
         }
 
       }
-    }).catch((error) => {
-      console.log(error)
     })
+      .catch((error) => {
+        console.log(error)
+
+      })
+
+    // await axios.post('/room/create-room', {
+    //   cc_pin,
+    //   password
+    // }).then((res) => {
+    //   console.log(res);
+    //   if (res.status == 200 || res.status == 201) {
+    //     console.log("Room successfully created, the user can navigate")
+    //     setPassword("");
+    //     setcc_pin("")
+    //     const url = `${window.location.origin}/room/${cc_pin}`;
+    //     setRoomUrl(url);
+    //     setOpenPopup(false);
+    //     localStorage.setItem("creater", true)
+    //     if (url) {
+    //       console.log("hiii")
+    //       window.open(url, "_blank");
+    //     }
+
+    //   }
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
   }
 
   return (
@@ -200,19 +247,19 @@ const HomePage = () => {
       </Box>
 
 
-      <Dialog 
-      open={openPopup}
-      onClose={() => setOpenPopup(false)} 
-      slotProps={{
-        paper: {
-          sx: {
-            // bgcolor: '#2a2a2a',
-            // color: 'white',
-            padding: 2,
-            borderRadius: 2,
+      <Dialog
+        open={openPopup}
+        onClose={() => setOpenPopup(false)}
+        slotProps={{
+          paper: {
+            sx: {
+              // bgcolor: '#2a2a2a',
+              // color: 'white',
+              padding: 2,
+              borderRadius: 2,
+            }
           }
-        }
-      }}>
+        }}>
         <DialogTitle>Create Room</DialogTitle>
         <DialogContent>
           <TextField sx={{ input: { color: "white" } }} label="CC Pin" fullWidth margin="dense" variant="outlined" value={cc_pin} disabled />
